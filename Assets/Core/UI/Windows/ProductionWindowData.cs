@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using Building;
 using UI.Data;
-using UnityEngine;
 
-public class ProductionWindowData : ISendData
+namespace UI
 {
-    public IBuildingView building;
-
-    public ProductionWindowData(IBuildingView building)
+    public class ProductionWindowData : ISendData
     {
-        this.building = building;
+        public IBuildingView building;
+
+        public ProductionWindowData(IBuildingView building)
+        {
+            this.building = building;
+        }
     }
 }

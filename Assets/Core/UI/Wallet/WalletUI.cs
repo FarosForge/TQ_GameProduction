@@ -1,20 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UI.Data;
 using UnityEngine;
 
-public class WalletUI : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private TextMeshProUGUI currencyText;
-
-    public void SetData(ISendData data)
+    public class WalletUI : MonoBehaviour
     {
-        switch (data)
+        [SerializeField] private TextMeshProUGUI currencyText;
+
+        public void SetData(ISendData data)
         {
-            case WalletUIData wallet:
-                currencyText.text = wallet.value.ToString();
-                break;
+            switch (data)
+            {
+                case WalletUIData wallet:
+                    currencyText.text = wallet.value.ToString();
+                    break;
+            }
         }
     }
 }

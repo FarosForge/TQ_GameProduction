@@ -1,49 +1,53 @@
-using System.Collections;
+using Game;
+using Item;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class ItemsWindow : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private ItemSlotUI slotPrefab;
-
-    private SessionManager session;
-    private List<ItemSlotUI> list = new();
-
-    [Inject]
-    public void Construct(SessionManager session)
+    public class ItemsWindow : MonoBehaviour
     {
-        this.session = session;
-    }
+        [SerializeField] private ItemSlot slotPrefab;
 
-    public void Init()
-    {
-        foreach (var item in session.ItemsContainer.ResourcesList)
+        private SessionManager session;
+        private List<ItemSlot> list = new();
+
+        [Inject]
+        public void Construct(SessionManager session)
         {
-            CreateSlot(item.Value);
+            this.session = session;
         }
 
-        foreach (var item in session.ItemsContainer.ItemsList)
+        public void Init()
         {
-            CreateSlot(item.Value);
+            foreach (var item in session.ItemsContainer.ResourcesList)
+            {
+                CreateSlot(item.Value);
+            }
+
+            foreach (var item in session.ItemsContainer.ItemsList)
+            {
+                CreateSlot(item.Value);
+            }
         }
-    }
 
-    private void CreateSlot(I_Item item)
-    {
-        var slot = Instantiate(slotPrefab);
-        slot.transform.SetParent(transform);
-        slot.transform.localScale = Vector3.one;
-        item.OnUpdateCount += UpdateWindow;
-        slot.SetData(item);
-        list.Add(slot);
-    }
-
-    private void UpdateWindow()
-    {
-        foreach (var item in list)
+        private void CreateSlot(I_Item item)
         {
-            item.UpdateSlot();
+            var slot = Instantiate(slotPrefab);
+            slot.transform.SetParent(transform);
+            slot.transform.localScale = Vector3.one;
+            item.OnUpdateCount += UpdateWindow;
+            slot.SetData(item);
+            list.Add(slot);
+        }
+
+        private void UpdateWindow()
+        {
+            foreach (var item in list)
+            {
+                item.UpdateSlot();
+            }
         }
     }
 }

@@ -1,23 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UI.Data;
-using UnityEngine;
 
-public class ItemsSelectorData : ISendData
+namespace UI
 {
-    public SlotSelector selector;
-    public SelectorDataType type;
-
-    public ItemsSelectorData(SlotSelector selector, SelectorDataType type)
+    public class ItemsSelectorData : ISendData
     {
-        this.selector = selector;
-        this.type = type;
-    }
-}
+        public SlotChanger selector;
+        public SelectorDataType type;
 
-public enum SelectorDataType
-{
-    Resource,
-    Items,
-    All
+        public ItemsSelectorData(SlotChanger selector, SelectorDataType type)
+        {
+            this.selector = selector;
+            this.type = type;
+        }
+    }
+
+    public enum SelectorDataType
+    {
+        Resource,
+        Items,
+        All
+    }
 }

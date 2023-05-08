@@ -1,28 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Config;
+using Work;
 
-public class BuildingModel : IBuilding
+namespace Building
 {
-    public IWork work { get; private set; }
-
-    public BuildingType type { get; private set; }
-
-    public BuildingModel(BuildingConfig config)
+    public class BuildingModel : IBuilding
     {
-        this.type = config.type;
+        public IWork work { get; private set; }
 
-        switch (type)
+        public BuildingType type { get; private set; }
+
+        public BuildingModel(BuildingConfig config)
         {
-            case BuildingType.Resource:
-                work = new WorkMining(config.ProductionTime);
-                break;
-            case BuildingType.Produtction:
-                work = new WorkProduction(config.ProductionTime);
-                break;
-            case BuildingType.Shop:
-                break;
-        }
-    }
+            type = config.type;
 
+            switch (type)
+            {
+                case BuildingType.Resource:
+                    work = new WorkMining(config.ProductionTime);
+                    break;
+                case BuildingType.Produtction:
+                    work = new WorkProduction(config.ProductionTime);
+                    break;
+                case BuildingType.Shop:
+                    break;
+            }
+        }
+
+    }
 }

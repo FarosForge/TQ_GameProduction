@@ -1,24 +1,25 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-[System.Serializable]
-public class Data
+namespace Save
 {
-    public int Currency;
-
-    public List<ItemData> items = new();
-}
-
-[System.Serializable]
-public class ItemData
-{
-    public string ID;
-    public int Count;
-
-    public ItemData(string iD, int count)
+    [System.Serializable]
+    public class Data
     {
-        ID = iD;
-        Count = count;
+        public int Currency;
+
+        public List<ItemData> items = new();
+    }
+
+    [System.Serializable]
+    public class ItemData
+    {
+        public string ID;
+        public int Count;
+
+        public ItemData(string iD, int count)
+        {
+            ID = iD;
+            Count = count;
+        }
     }
 }

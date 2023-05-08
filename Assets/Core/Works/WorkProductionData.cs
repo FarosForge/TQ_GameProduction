@@ -1,17 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Game;
+using Item;
 
-public class WorkProductionData : IWorkData
+namespace Work
 {
-    public IResource[] resources;
-    public int RecipeID;
-    public SessionManager session;
-
-    public WorkProductionData(IResource[] resources, int recipeID, SessionManager session)
+    public class WorkProductionData : IWorkData
     {
-        this.resources = resources;
-        RecipeID = recipeID;
-        this.session = session;
+        public IResource[] resources;
+        public int RecipeID;
+        public SessionManager session;
+
+        public WorkProductionData(IResource[] resources, int recipeID, SessionManager session)
+        {
+            this.resources = resources;
+            RecipeID = recipeID;
+            this.session = session;
+        }
     }
 }

@@ -1,6 +1,10 @@
+using Work;
 
-public interface IBuilding
+namespace Building
 {
-    IWork work { get; }
-    BuildingType type { get; }
+    public interface IBuilding
+    {
+        IWork work { get; }
+        BuildingType type { get; }
+    }
 }

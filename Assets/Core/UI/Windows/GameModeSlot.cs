@@ -1,18 +1,19 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameModeSlot : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private Button button;
-    [SerializeField] private TextMeshProUGUI buttonText;
-
-    public void SetData(int val, Action action)
+    public class GameModeSlot : MonoBehaviour
     {
-        buttonText.text = val.ToString();
-        button.onClick.AddListener(() => action());
+        [SerializeField] private Button button;
+        [SerializeField] private TextMeshProUGUI buttonText;
+
+        public void SetData(int val, Action action)
+        {
+            buttonText.text = val.ToString();
+            button.onClick.AddListener(() => action());
+        }
     }
 }

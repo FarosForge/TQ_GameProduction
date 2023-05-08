@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+using Building;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Building", menuName = "GAME/Buildings/New Building")]
-public class BuildingConfig : ScriptableObject
+namespace Config
 {
-    public int ID;
-    public BuildingType type;
-    public float ProductionTime;
+    [CreateAssetMenu(fileName = "New Building", menuName = "GAME/Buildings/New Building")]
+    public class BuildingConfig : ScriptableObject
+    {
+        public int ID;
+        public BuildingType type;
+        public float ProductionTime;
+    }
 }

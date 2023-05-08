@@ -1,51 +1,59 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using Global.Wallet;
+using Game;
 
-public class SaveSystem
+namespace Save
 {
-    private const string SAVEID = "GameProduction";
-    public Data data { get; private set; }
-
-    private SessionManager session;
-
-    [Inject]
-    public void Construct(SessionManager session)
+    public class SaveSystem
     {
-        this.session = session;
-        data = new Data();
-    }
+        private const string SAVEID = "GameProduction";
+        public Data data { get; private set; }
 
-    public void Save()
-    {
-        data.Currency = session.Wallet.GetCurrency(CurrencyType.Gold).GetValue();
+        private SessionManager session;
 
-        List<ItemData> items = new List<ItemData>();
-        foreach (var item in session.ItemsContainer.ResourcesList)
+        [Inject]
+        public void Construct(SessionManager session)
         {
-            ItemData it = new ItemData(item.Key, item.Value.Count);
-            items.Add(it);
+            this.session = session;
+            data = new Data();
         }
 
-        foreach (var item in session.ItemsContainer.ItemsList)
+        public void Save()
         {
-            ItemData it = new ItemData(item.Key, item.Value.Count);
-            items.Add(it);
+            data.Currency = session.Wallet.GetCurrency(CurrencyType.Gold).GetValue();
+
+            List<ItemData> items = new List<ItemData>();
+            foreach (var item in session.ItemsContainer.ResourcesList)
+            {
+                ItemData it = new ItemData(item.Key, item.Value.Count);
+                items.Add(it);
+            }
+
+            foreach (var item in session.ItemsContainer.ItemsList)
+            {
+                ItemData it = new ItemData(item.Key, item.Value.Count);
+                items.Add(it);
+            }
+
+            data.items = items;
+
+            string json = JsonUtility.ToJson(data);
+            PlayerPrefs.SetString(SAVEID, json);
         }
 
-        data.items = items;
+        public void Load()
+        {
+            if (!PlayerPrefs.HasKey(SAVEID)) return;
 
-        string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString(SAVEID, json);
-    }
+            string json = PlayerPrefs.GetString(SAVEID);
+            data = JsonUtility.FromJson<Data>(json);
+        }
 
-    public void Load()
-    {
-        if (!PlayerPrefs.HasKey(SAVEID)) return;
-
-        string json = PlayerPrefs.GetString(SAVEID);
-        data = JsonUtility.FromJson<Data>(json);
+        public void ClearSave()
+        {
+            PlayerPrefs.DeleteKey(SAVEID);
+        }
     }
 }

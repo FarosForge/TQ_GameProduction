@@ -1,8 +1,9 @@
-
-
-public enum BuildingType
+namespace Building
 {
-    Resource,
-    Produtction,
-    Shop
+    public enum BuildingType
+    {
+        Resource,
+        Produtction,
+        Shop
+    }
 }

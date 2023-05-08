@@ -1,30 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingsViewContainer : MonoBehaviour
+namespace Building
 {
-    [SerializeField] private List<ResorceBuilding> resorceBuildings;
-    [SerializeField] private List<ProductionBuilding> productionBuildings;
-
-    public List<ResorceBuilding> ResorceBuildings { get => resorceBuildings; }
-    public List<ProductionBuilding> ProductionBuildings { get => productionBuildings; }
-
-    public void SetActiveResourceBuildings(int val)
+    public class BuildingsViewContainer : MonoBehaviour
     {
-        DeactivateResourceBuildings();
+        [SerializeField] private List<ResorceBuilding> resorceBuildings;
+        [SerializeField] private List<ProductionBuilding> productionBuildings;
 
-        for (int i = 0; i < val; i++)
+        public List<ResorceBuilding> ResorceBuildings { get => resorceBuildings; }
+        public List<ProductionBuilding> ProductionBuildings { get => productionBuildings; }
+
+        public void SetActiveResourceBuildings(int val)
         {
-            resorceBuildings[i].gameObject.SetActive(true);
+            DeactivateResourceBuildings();
+
+            for (int i = 0; i < val; i++)
+            {
+                resorceBuildings[i].gameObject.SetActive(true);
+            }
         }
-    }
 
-    private void DeactivateResourceBuildings()
-    {
-        foreach (var build in resorceBuildings)
+        private void DeactivateResourceBuildings()
         {
-            build.gameObject.SetActive(false);
+            foreach (var build in resorceBuildings)
+            {
+                build.gameObject.SetActive(false);
+            }
         }
     }
 }

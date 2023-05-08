@@ -1,9 +1,11 @@
-
-public interface IBuildingView
+namespace Building
 {
-    IBuilding currentModel { get; }
-    void OnClick();
+    public interface IBuildingView
+    {
+        IBuilding currentModel { get; }
+        void OnClick();
 
-    void SetModel(IBuilding model);
+        void SetModel(IBuilding model);
 
+    }
 }

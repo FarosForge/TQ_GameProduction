@@ -1,9 +1,14 @@
-public class WorkMinigData : IWorkData
-{
-    public IResource resource;
+using Item;
 
-    public WorkMinigData(IResource resource)
+namespace Work
+{
+    public class WorkMinigData : IWorkData
     {
-        this.resource = resource;
+        public IResource resource;
+
+        public WorkMinigData(IResource resource)
+        {
+            this.resource = resource;
+        }
     }
 }

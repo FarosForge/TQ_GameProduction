@@ -1,102 +1,103 @@
-using System.Collections;
-using System.Collections.Generic;
+using Building;
+using Item;
 using TMPro;
-using UI;
 using UI.Data;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
+using Work;
 
-public class MiningWindow : BuildingWindow
+namespace UI
 {
-    [SerializeField] private Image slider;
-    [SerializeField] private Button startButton;
-    [SerializeField] private TextMeshProUGUI buttonText;
-    [SerializeField] private SlotSelector slot;
-
-    private IBuildingView building;
-    private IResource[] resource;
-
-    public override void SetData(ISendData data)
+    public class MiningWindow : BuildingWindow
     {
-        resource = new IResource[resourceSlotsCount];
+        [SerializeField] private Button startButton;
+        [SerializeField] private TextMeshProUGUI buttonText;
+        [SerializeField] private SlotChanger slot;
 
-        switch (data)
+        private IBuildingView building;
+        private IResource[] resource;
+
+        public override void SetData(ISendData data)
         {
-            case MiningWindowData listener:
+            resource = new IResource[resourceSlotsCount];
 
-                building = listener.building;
+            switch (data)
+            {
+                case MiningWindowData listener:
 
-                resource[0] = building.currentModel.work.Resources[0];
+                    building = listener.building;
 
-                if (resource[0] != null)
-                {
-                    slot.Select(resource[0]);
-                }
-                else
-                {
-                    slot.ClearSlot();
-                }
+                    resource[0] = building.currentModel.work.Resources[0];
 
-                slot.OnSelected += UpdateWindow;
+                    if (resource[0] != null)
+                    {
+                        slot.Select(resource[0]);
+                    }
+                    else
+                    {
+                        slot.ClearSlot();
+                    }
 
-                UpdateWindow();
-                Activate();
-                break;
+                    slot.OnSelected += UpdateWindow;
+
+                    UpdateWindow();
+                    Activate();
+                    break;
+            }
         }
-    }
 
-    private void OnDestroy()
-    {
-        slot.OnSelected -= UpdateWindow;
-    }
-
-    private void StartMining()
-    {
-        Debug.Log("Start Mining");
-        building.currentModel.work.StartWork(new WorkMinigData(resource[0]));
-        UpdateWindow();
-    }
-
-    private void StopMining()
-    {
-        building.currentModel.work.StopWork();
-        UpdateWindow();
-    }
-
-    private void UpdateWindow()
-    {
-        if (!building.currentModel.work.InWorking)
+        private void OnDestroy()
         {
-            if (slot.IsFull)
+            slot.OnSelected -= UpdateWindow;
+        }
+
+        private void StartMining()
+        {
+            Debug.Log("Start Mining");
+            building.currentModel.work.StartWork(new WorkMinigData(resource[0]));
+            UpdateWindow();
+        }
+
+        private void StopMining()
+        {
+            building.currentModel.work.StopWork();
+            UpdateWindow();
+        }
+
+        private void UpdateWindow()
+        {
+            if (!building.currentModel.work.InWorking)
+            {
+                if (slot.IsFull)
+                {
+                    startButton.onClick.RemoveAllListeners();
+                    startButton.onClick.AddListener(() => StartMining());
+                }
+                startButton.image.color = Color.white;
+                startButton.interactable = slot.IsFull;
+                slot.SetInteractable(true);
+                buttonText.text = "START";
+            }
+            else
             {
                 startButton.onClick.RemoveAllListeners();
-                startButton.onClick.AddListener(() => StartMining());
+                startButton.onClick.AddListener(() => StopMining());
+                startButton.image.color = Color.red;
+                startButton.interactable = true;
+                slot.SetInteractable(false);
+                buttonText.text = "STOP";
             }
-            startButton.image.color = Color.white;
-            startButton.interactable = slot.IsFull;
-            slot.SetInteractable(true);
-            buttonText.text = "START";
         }
-        else
+
+        public override void SetResource(I_Item resource, int id)
         {
-            startButton.onClick.RemoveAllListeners();
-            startButton.onClick.AddListener(() => StopMining());
-            startButton.image.color = Color.red;
-            startButton.interactable = true;
-            slot.SetInteractable(false);
-            buttonText.text = "STOP";
+            this.resource[id] = (IResource)resource;
         }
-    }
 
-    public override void SetResource(I_Item resource, int id)
-    {
-        this.resource[id] = (IResource)resource;
-    }
-
-    public override void Deactivate()
-    {
-        UIEventsTranslator.Call(UIEventsTranslator.GetKey(nameof(ItemsSelector) + "Deact"));
-        base.Deactivate();
+        public override void Deactivate()
+        {
+            UIEventsTranslator.Call(UIEventsTranslator.GetKey(nameof(ItemsSelector) + "Deact"));
+            base.Deactivate();
+        }
     }
 }

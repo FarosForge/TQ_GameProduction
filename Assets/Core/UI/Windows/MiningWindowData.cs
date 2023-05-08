@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
+using Building;
 using UI.Data;
-using UnityEngine;
 
-public class MiningWindowData : ISendData
+namespace UI
 {
-    public IBuildingView building;
-
-    public MiningWindowData(IBuildingView building)
+    public class MiningWindowData : ISendData
     {
-        this.building = building;
+        public IBuildingView building;
+
+        public MiningWindowData(IBuildingView building)
+        {
+            this.building = building;
+        }
     }
 }

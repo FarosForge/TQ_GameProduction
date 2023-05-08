@@ -1,15 +1,16 @@
+using Game;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameModesListConfig", menuName = "GAME/GameModesListConfig")]
-public class GameModesListConfig : ScriptableObject
+namespace Config
 {
-    [SerializeField] private GameModeRef[] list;
+    [CreateAssetMenu(fileName = "GameModesListConfig", menuName = "GAME/GameModesListConfig")]
+    public class GameModesListConfig : ScriptableObject
+    {
+        [SerializeField] private GameModeRef[] list;
+        [SerializeField] private int goldCountToGameOver;
 
-    public GameModeRef[] List { get => list; }
-}
+        public GameModeRef[] List { get => list; }
+        public int GoldCountToGameOver { get => goldCountToGameOver; }
 
-[System.Serializable]
-public struct GameModeRef
-{
-    public int ResourceBuildsCount;
+    }
 }

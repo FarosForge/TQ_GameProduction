@@ -1,64 +1,80 @@
-using System.Collections;
+using Config;
+using Game;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class BuildingsContainer
+namespace Building
 {
-    private Dictionary<int, IBuilding> resourceBuildingsList = new();
-    private Dictionary<int, IBuilding> productionBuildingsList = new();
-    private BuildingsContainerConfig config;
-    private BuildingsViewContainer buildingsView;
-    private SessionManager session;
-
-    public Dictionary<int, IBuilding> ResourceBuildingsList { get => resourceBuildingsList; }
-    public Dictionary<int, IBuilding> ProductionBuildingsList { get => productionBuildingsList; }
-
-    public BuildingsContainer(SessionManager session)
+    public class BuildingsContainer
     {
-        this.config = session.BuildingsConfig;
-        this.buildingsView = session.BuildingsView;
-        this.session = session;
-        Init();
-    }
+        private Dictionary<int, IBuilding> resourceBuildingsList = new();
+        private Dictionary<int, IBuilding> productionBuildingsList = new();
+        private BuildingsContainerConfig config;
+        private BuildingsViewContainer buildingsView;
+        private SessionManager session;
 
-    private void Init()
-    {
-        for (int i = 0; i < config.ResourceBuildings.Count; i++)
+        public Dictionary<int, IBuilding> ResourceBuildingsList { get => resourceBuildingsList; }
+        public Dictionary<int, IBuilding> ProductionBuildingsList { get => productionBuildingsList; }
+
+        public BuildingsContainer(SessionManager session)
         {
-            var building = config.ResourceBuildings[i];
-            CreateBuilding(building, i);
+            config = session.BuildingsConfig;
+            buildingsView = session.BuildingsView;
+            this.session = session;
+            Init();
         }
 
-        for (int i = 0; i < config.ProductionBuildings.Count; i++)
+        private void Init()
         {
-            var building = config.ProductionBuildings[i];
-            CreateBuilding(building, i);
-        }
-    }
-    
+            for (int i = 0; i < config.ResourceBuildings.Count; i++)
+            {
+                var building = config.ResourceBuildings[i];
+                CreateBuilding(building, i);
+            }
 
-    private void CreateBuilding(BuildingConfig building, int ID)
-    {
-
-        IBuilding build = new BuildingModel(building);
-
-        switch (building.type)
-        {
-            case BuildingType.Resource:
-                if (resourceBuildingsList.ContainsKey(building.ID)) return;
-                
-                buildingsView.ResorceBuildings[ID].SetModel(build);
-                resourceBuildingsList.Add(building.ID, build);
-                break;
-            case BuildingType.Produtction:
-                if (productionBuildingsList.ContainsKey(building.ID)) return;
-
-                buildingsView.ProductionBuildings[ID].SetModel(build);
-                productionBuildingsList.Add(building.ID, build);
-                break;
-            case BuildingType.Shop:
-                break;
+            for (int i = 0; i < config.ProductionBuildings.Count; i++)
+            {
+                var building = config.ProductionBuildings[i];
+                CreateBuilding(building, i);
+            }
         }
 
+
+        private void CreateBuilding(BuildingConfig building, int ID)
+        {
+
+            IBuilding build = new BuildingModel(building);
+
+            switch (building.type)
+            {
+                case BuildingType.Resource:
+                    if (resourceBuildingsList.ContainsKey(building.ID)) return;
+
+                    buildingsView.ResorceBuildings[ID].SetModel(build);
+                    resourceBuildingsList.Add(building.ID, build);
+                    break;
+                case BuildingType.Produtction:
+                    if (productionBuildingsList.ContainsKey(building.ID)) return;
+
+                    buildingsView.ProductionBuildings[ID].SetModel(build);
+                    productionBuildingsList.Add(building.ID, build);
+                    break;
+                case BuildingType.Shop:
+                    break;
+            }
+
+        }
+
+        public void StopAllBuildings()
+        {
+            foreach (var building in resourceBuildingsList)
+            {
+                building.Value.work.StopWork();
+            }
+
+            foreach (var building in productionBuildingsList)
+            {
+                building.Value.work.StopWork();
+            }
+        }
     }
 }

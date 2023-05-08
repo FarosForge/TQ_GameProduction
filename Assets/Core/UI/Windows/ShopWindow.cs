@@ -1,72 +1,75 @@
 using TMPro;
-using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 using Global.Wallet;
+using Game;
+using Item;
 
-public class ShopWindow : BuildingWindow
+namespace UI
 {
-    [SerializeField] private SlotSelector slot;
-    [SerializeField] private Button sellButton;
-    [SerializeField] private TextMeshProUGUI priceText;
-    [SerializeField] private TextMeshProUGUI countText;
-    [SerializeField] private GameObject countObject;
-
-    private SessionManager session;
-    private I_Item currentItem;
-
-    [Inject]
-    public void Construct(SessionManager session)
+    public class ShopWindow : BuildingWindow
     {
-        this.session = session;
-    }
+        [SerializeField] private SlotChanger slot;
+        [SerializeField] private Button sellButton;
+        [SerializeField] private TextMeshProUGUI priceText;
+        [SerializeField] private TextMeshProUGUI countText;
+        [SerializeField] private GameObject countObject;
 
-    public void Start()
-    {
-        sellButton.onClick.AddListener(() => Sell());
-        slot.OnSelected += UpdateWindow;
-        slot.SetInteractable(true);
-        UpdateWindow();
-    }
+        private SessionManager session;
+        private I_Item currentItem;
 
-    private void OnDestroy()
-    {
-        slot.OnSelected -= UpdateWindow;
-    }
+        [Inject]
+        public void Construct(SessionManager session)
+        {
+            this.session = session;
+        }
 
-    private void UpdateWindow()
-    {
-        sellButton.interactable = currentItem != null;
-        priceText.text = currentItem == null ? "0" : currentItem.Price.ToString();
-        countObject.SetActive(currentItem != null);
-        if(currentItem != null)
-            countText.text = currentItem.Count.ToString();
-    }
+        public void Start()
+        {
+            sellButton.onClick.AddListener(() => Sell());
+            slot.OnSelected += UpdateWindow;
+            slot.SetInteractable(true);
+            UpdateWindow();
+        }
 
-    public void Sell()
-    {
-        if (currentItem == null) return;
+        private void OnDestroy()
+        {
+            slot.OnSelected -= UpdateWindow;
+        }
 
-        session.Wallet.GetCurrency(CurrencyType.Gold).OnAddedCurrencyValue(currentItem.Price);
-        UIEventsTranslator.Call(UIEventsTranslator.GetKey(nameof(WalletUI)),
-            new WalletUIData(session.Wallet.GetCurrency(CurrencyType.Gold).GetValue()));
-        currentItem.Remove(1);
-        slot.ClearSlot();
-        currentItem = null;
-        UpdateWindow();
-    }
+        private void UpdateWindow()
+        {
+            sellButton.interactable = currentItem != null;
+            priceText.text = currentItem == null ? "0" : currentItem.Price.ToString();
+            countObject.SetActive(currentItem != null);
+            if (currentItem != null)
+                countText.text = currentItem.Count.ToString();
+        }
 
-    public override void SetResource(I_Item resource, int id)
-    {
-        currentItem = resource;
-    }
+        public void Sell()
+        {
+            if (currentItem == null) return;
 
-    public override void Deactivate()
-    {
-        UIEventsTranslator.Call(UIEventsTranslator.GetKey(nameof(ItemsSelector) + "Deact"));
-        currentItem = null;
-        slot.ClearSlot();
-        base.Deactivate();
+            session.Wallet.GetCurrency(CurrencyType.Gold).OnAddedCurrencyValue(currentItem.Price);
+            UIEventsTranslator.Call(UIEventsTranslator.GetKey(nameof(WalletUI)),
+                new WalletUIData(session.Wallet.GetCurrency(CurrencyType.Gold).GetValue()));
+            currentItem.Remove(1);
+            slot.ClearSlot();
+            currentItem = null;
+            UpdateWindow();
+        }
+
+        public override void SetResource(I_Item resource, int id)
+        {
+            currentItem = resource;
+        }
+
+        public override void Deactivate()
+        {
+            UIEventsTranslator.Call(UIEventsTranslator.GetKey(nameof(ItemsSelector) + "Deact"));
+            slot.ClearSlot();
+            base.Deactivate();
+        }
     }
 }

@@ -1,45 +1,48 @@
+using Config;
+using Save;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource : IResource
+namespace Item
 {
-    public int Count { get; private set; }
-    public int Price { get; private set; }
-    public string ID { get; private set; }
-    public Sprite Icon { get; private set; }
-    public Action OnUpdateCount { get; set; }
-
-    private SaveSystem saveSystem;
-
-    public Resource(int count, ItemConfig config, SaveSystem saveSystem)
+    public class Resource : IResource
     {
-        Count = count;
-        Price = config.price;
-        ID = config.ID;
-        Icon = config.icon;
-        this.saveSystem = saveSystem;
-    }
+        public int Count { get; private set; }
+        public int Price { get; private set; }
+        public string ID { get; private set; }
+        public Sprite Icon { get; private set; }
+        public Action OnUpdateCount { get; set; }
 
-    public void Add(int val)
-    {
-        Count++;
+        private SaveSystem saveSystem;
 
-        OnUpdateCount?.Invoke();
-        saveSystem.Save();
-    }
-
-    public void Remove(int val)
-    {
-        Count--;
-
-        if(Count <= 0)
+        public Resource(int count, ItemConfig config, SaveSystem saveSystem)
         {
-            Count = 0;
+            Count = count;
+            Price = config.price;
+            ID = config.ID;
+            Icon = config.icon;
+            this.saveSystem = saveSystem;
         }
 
-        OnUpdateCount?.Invoke();
-        saveSystem.Save();
+        public void Add(int val)
+        {
+            Count++;
+
+            OnUpdateCount?.Invoke();
+            saveSystem.Save();
+        }
+
+        public void Remove(int val)
+        {
+            Count--;
+
+            if (Count <= 0)
+            {
+                Count = 0;
+            }
+
+            OnUpdateCount?.Invoke();
+            saveSystem.Save();
+        }
     }
 }

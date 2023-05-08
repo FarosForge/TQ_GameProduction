@@ -1,36 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Recipe", menuName = "GAME/Recipes/New Recipe")]
-public class RecipeConfig : ScriptableObject
+namespace Config
 {
-    [SerializeField] private ItemConfig[] resources;
-    [SerializeField] private ItemConfig resultItem;
-
-    public ItemConfig[] Resources { get => resources; }
-
-    public ItemConfig GetResult(string[] res)
+    [CreateAssetMenu(fileName = "New Recipe", menuName = "GAME/Recipes/New Recipe")]
+    public class RecipeConfig : ScriptableObject
     {
-        int v = 0;
+        [SerializeField] private ItemConfig[] resources;
+        [SerializeField] private ItemConfig resultItem;
 
-        foreach (var item in resources)
+        public ItemConfig[] Resources { get => resources; }
+
+        public ItemConfig GetResult(string[] res)
         {
-            foreach (var val in res)
+            int v = 0;
+
+            foreach (var item in resources)
             {
-                if(item.ID == val)
+                foreach (var val in res)
                 {
-                    v++;
-                    break;
+                    if (item.ID == val)
+                    {
+                        v++;
+                        break;
+                    }
                 }
             }
-        }
 
-        if(v == resources.Length)
-        {
-            return resultItem;
-        }
+            if (v == resources.Length)
+            {
+                return resultItem;
+            }
 
-        return null;
+            return null;
+        }
     }
 }

@@ -1,61 +1,64 @@
-using System.Collections;
+using Config;
+using Save;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class ItemsContainer
+namespace Item
 {
-    private Dictionary<string,I_Item> itemsList = new();
-    private Dictionary<string, IResource> resourcesList = new();
-
-    private ItemsContainerConfig config;
-    private SaveSystem saveSystem;
-
-    public Dictionary<string, I_Item> ItemsList { get => itemsList; }
-    public Dictionary<string, IResource> ResourcesList { get => resourcesList; }
-
-    public ItemsContainer(ItemsContainerConfig config, SaveSystem saveSystem)
+    public class ItemsContainer
     {
-        this.config = config;
-        this.saveSystem = saveSystem;
-    }
+        private Dictionary<string, I_Item> itemsList = new();
+        private Dictionary<string, IResource> resourcesList = new();
 
-    public void Init()
-    {
-        foreach (var item in config.ItemsList)
+        private ItemsContainerConfig config;
+        private SaveSystem saveSystem;
+
+        public Dictionary<string, I_Item> ItemsList { get => itemsList; }
+        public Dictionary<string, IResource> ResourcesList { get => resourcesList; }
+
+        public ItemsContainer(ItemsContainerConfig config, SaveSystem saveSystem)
         {
-            CreateItem(item);
+            this.config = config;
+            this.saveSystem = saveSystem;
         }
 
-        foreach (var res in config.ResourcesList)
+        public void Init()
         {
-            CreateResource(res);
+            foreach (var item in config.ItemsList)
+            {
+                CreateItem(item);
+            }
+
+            foreach (var res in config.ResourcesList)
+            {
+                CreateResource(res);
+            }
         }
-    }
 
-    private void CreateItem(ItemConfig item)
-    {
-        if (itemsList.ContainsKey(item.ID)) return;
+        private void CreateItem(ItemConfig item)
+        {
+            if (itemsList.ContainsKey(item.ID)) return;
 
-        int count = saveSystem.data.items.Count > 0 && saveSystem != null ? saveSystem.data.items.Find(v => v.ID == item.ID).Count : 0;
+            int count = saveSystem.data.items.Count > 0 && saveSystem != null ? saveSystem.data.items.Find(v => v.ID == item.ID).Count : 0;
 
-        I_Item it = new Item(count, item, saveSystem);
+            I_Item it = new Item(count, item, saveSystem);
 
-        itemsList.Add(item.ID, it);
-    }
+            itemsList.Add(item.ID, it);
+        }
 
-    private void CreateResource(ItemConfig res)
-    {
-        if (resourcesList.ContainsKey(res.ID)) return;
+        private void CreateResource(ItemConfig res)
+        {
+            if (resourcesList.ContainsKey(res.ID)) return;
 
-        int count = saveSystem.data.items.Count > 0 ? saveSystem.data.items.Find(v => v.ID == res.ID).Count : 0;
+            int count = saveSystem.data.items.Count > 0 ? saveSystem.data.items.Find(v => v.ID == res.ID).Count : 0;
 
-        IResource it = new Resource(count, res, saveSystem);
+            IResource it = new Resource(count, res, saveSystem);
 
-        resourcesList.Add(res.ID, it);
-    }
+            resourcesList.Add(res.ID, it);
+        }
 
-    public I_Item GetItem(string id)
-    {
-        return itemsList[id];
+        public I_Item GetItem(string id)
+        {
+            return itemsList[id];
+        }
     }
 }

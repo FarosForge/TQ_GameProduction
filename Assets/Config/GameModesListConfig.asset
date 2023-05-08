@@ -16,3 +16,4 @@ MonoBehaviour:
   - ResourceBuildsCount: 1
   - ResourceBuildsCount: 2
   - ResourceBuildsCount: 3
+  goldCountToGameOver: 30

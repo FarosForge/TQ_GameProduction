@@ -1,4 +1,6 @@
 
+using Save;
+
 namespace Global.Wallet
 {
     public class GoldCurrency : Currency

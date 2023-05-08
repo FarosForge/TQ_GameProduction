@@ -1,45 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
+using Config;
+using Game;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
-public class MenuWindow : UIWindow
+namespace UI
 {
-    [SerializeField] private Transform buttonsGroup;
-    [SerializeField] private Button startButton;
-    [SerializeField] private GameModeSlot slotPrefab;
-
-    private GameModesListConfig gameModes;
-    private SessionManager session;
-
-    [Inject]
-    public void Construct(GameModesListConfig gameModes, SessionManager session)
+    public class MenuWindow : UIWindow
     {
-        this.session = session;
-        this.gameModes = gameModes;
-    }
+        [SerializeField] private Transform buttonsGroup;
+        [SerializeField] private Button startButton;
+        [SerializeField] private GameModeSlot slotPrefab;
 
-    private void Start()
-    {
-        foreach (var mode in gameModes.List)
+        private GameModesListConfig gameModes;
+        private SessionManager session;
+
+        [Inject]
+        public void Construct(GameModesListConfig gameModes, SessionManager session)
         {
-            CreateSlot(mode);
+            this.session = session;
+            this.gameModes = gameModes;
         }
-        session.SetGameMode(1);
-        startButton.onClick.AddListener(() => session.Init(Deactivate));
-    }
 
-    private void CreateSlot(GameModeRef mode)
-    {
-        var slot = Instantiate(slotPrefab);
-        slot.transform.SetParent(buttonsGroup);
-        slot.transform.localScale = Vector3.one;
+        private void Start()
+        {
+            foreach (var mode in gameModes.List)
+            {
+                CreateSlot(mode);
+            }
+            session.SetGameMode(1);
+            startButton.onClick.AddListener(() => session.Init(Deactivate));
+        }
 
-        slot.SetData
-        (
-            mode.ResourceBuildsCount,
-            () => session.SetGameMode(mode.ResourceBuildsCount)
-        );
+        private void CreateSlot(GameModeRef mode)
+        {
+            var slot = Instantiate(slotPrefab);
+            slot.transform.SetParent(buttonsGroup);
+            slot.transform.localScale = Vector3.one;
+
+            slot.SetData
+            (
+                mode.ResourceBuildsCount,
+                () => session.SetGameMode(mode.ResourceBuildsCount)
+            );
+        }
     }
 }

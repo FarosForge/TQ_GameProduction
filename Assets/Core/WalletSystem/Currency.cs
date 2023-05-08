@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Save;
 
 namespace Global.Wallet
 {
@@ -9,6 +10,8 @@ namespace Global.Wallet
     {
         public Action<int> OnAddedCurrencyValue;
         public Action<int> OnRemovedCurrencyValue;
+
+        public Action PostAddedValue;
 
         private int value = 0;
         private int maxPrice = 0;
@@ -63,6 +66,7 @@ namespace Global.Wallet
             value += val;
 
             saveSystem.Save();
+            PostAddedValue?.Invoke();
         }
 
         protected virtual void RemoveFromValue(int val)

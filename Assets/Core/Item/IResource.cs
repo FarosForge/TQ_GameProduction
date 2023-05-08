@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IResource : I_Item
-{     
+namespace Item
+{
+    public interface IResource : I_Item
+    {
+    }
 }

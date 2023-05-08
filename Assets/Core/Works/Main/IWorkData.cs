@@ -1,4 +1,7 @@
-public interface IWorkData
+namespace Work
 {
-    
+    public interface IWorkData
+    {
+
+    }
 }
